@@ -62,15 +62,17 @@ class SimulacionsController < ApplicationController
     
     g_anual=1797 #kWh_año/m2
     
-    region=params["region"]
+    region=sim["region"]
+    
     if datos_radiacion=Radiacion.where(:nombre_region=>region).first
+      p "long_sep= "+datos_radiacion.long_sep.to_s
       if sim["longitud"]>=datos_radiacion.long_sep
-        g_anual=datos_radiacion.rad_cord
+        g_anual=datos_radiacion.rad_cord.round(2)
       else
-        datos_radiacion.rad_costa
+        g_anual=datos_radiacion.rad_costa.round(2)
       end
     end
-    p g_anual
+    p "g_anual="+g_anual.to_s
     
     latr = sim["latitud"].to_f*Math::PI/180
     lonr = sim["longitud"].to_f*Math::PI/180
@@ -78,7 +80,7 @@ class SimulacionsController < ApplicationController
     datos_rubro=Rubro.where(:rubro_id=>sim["rubro"]).first
     ases=Costo.where(:coef=>"A").first
     bses=Costo.where(:coef=>"B").first
-    p sim["combustible"]
+    
     case sim["combustible"].to_i #pci en kWh/kg, densidad en kg/m3
     when 1 #carbóns
         pci= 7.17
@@ -126,14 +128,16 @@ class SimulacionsController < ApplicationController
     
     demanda=consumo*datos_rubro.QQT*sim["eficiencia"].to_f/100 #kWh_año
     
-    
     superficie=[sim["superficie"].to_f,demanda*0.8/(g_anual*0.5)].min
     
+    p superficie
+    
+    areas[0]=0
     j=0
     for k in 0..9
       j=k+2
-      p fibonacci(j)
-      areas[k]=superficie*fibonacci(j)/89
+      #p fibonacci(j)
+      areas[k+1]=superficie*fibonacci(j)/89
     end
     
     for i in 0..areas.count-1
@@ -325,6 +329,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def simulacion_params
-      params.require(:Simulacion).permit(:id,:nombre,:latitud,:longitud,:empresa_id,:antiguedad, :recuperacion, :consumo_electrico_general, :unidad_consumo_electrico_general,:consumo_minimo,:unidad_consumo_minimo,:combustible,:tecnologia,:consumo,:consumo_electrico,:cop,:eficiencia,:precio_combustible,:precio_electricidad,:superficie,:superficie_lugar,:unidad_consumo,:unidad_consumo_electrico,:unidad_precio_combustible,:rubro)
+      params.require(:Simulacion).permit(:id,:nombre,:region,:latitud,:longitud,:empresa_id,:antiguedad, :recuperacion, :consumo_electrico_general, :unidad_consumo_electrico_general,:consumo_minimo,:unidad_consumo_minimo,:combustible,:tecnologia,:consumo,:consumo_electrico,:cop,:eficiencia,:precio_combustible,:precio_electricidad,:superficie,:superficie_lugar,:unidad_consumo,:unidad_consumo_electrico,:unidad_precio_combustible,:rubro)
     end
 end

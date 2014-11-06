@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141106163402) do
+ActiveRecord::Schema.define(version: 20141106181908) do
 
   create_table "costos", force: true do |t|
     t.string   "coef"
@@ -62,13 +62,23 @@ ActiveRecord::Schema.define(version: 20141106163402) do
     t.decimal "F_PTC_B",             precision: 7, scale: 6
   end
 
+  create_table "radiaciones_promedio_anuales", id: false, force: true do |t|
+    t.integer "id"
+    t.string  "nombre_region", limit: 48
+    t.decimal "long_sep",                 precision: 4, scale: 1
+    t.decimal "rad_costa",                precision: 6, scale: 2
+    t.decimal "rad_cord",                 precision: 6, scale: 2
+    t.string  "created_at",    limit: 16
+    t.string  "updated_at",    limit: 16
+  end
+
   create_table "radiacions", force: true do |t|
-    t.string   "nombre_region"
-    t.float    "long_sep",      limit: 24
-    t.float    "rad_costa",     limit: 24
-    t.float    "rad_cord",      limit: 24
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "nombre_region", limit: 60
+    t.float  "long_sep",      limit: 53
+    t.float  "rad_costa",     limit: 53
+    t.float  "rad_cord",      limit: 53
+    t.string "created_at",    limit: 16
+    t.string "updated_at",    limit: 16
   end
 
   create_table "rubros", force: true do |t|
@@ -122,6 +132,7 @@ ActiveRecord::Schema.define(version: 20141106163402) do
     t.integer  "unidad_consumo_electrico_general"
     t.float    "consumo_minimo",                   limit: 53
     t.integer  "unidad_consumo_minimo"
+    t.text     "region"
   end
 
 end
