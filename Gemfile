@@ -10,7 +10,7 @@ gem 'amoeba', '~> 2.0.0'
 gem 'rack-cors', :require => 'rack/cors'
 gem "active_model_serializers"
 gem 'encrypted_strings', :git => 'git://github.com/pluginaweek/encrypted_strings.git'
-
+gem 'pg'
 # Use mysql2 as the database for Active Record
 gem 'mysql2'
 # Use SCSS for stylesheets
